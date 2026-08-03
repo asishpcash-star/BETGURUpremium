@@ -1,0 +1,6 @@
+{
+  "name": "BETGURU - Premium Online Lottery",
+  "description": "BETGURU Official Online Lottery Platform with real-time 30-minute draw results, live wallet deposits & withdrawals, super admin control panel, and animated gold UI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
