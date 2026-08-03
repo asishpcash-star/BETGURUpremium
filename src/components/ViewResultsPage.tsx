@@ -44,8 +44,8 @@ export const ViewResultsPage: React.FC<ViewResultsPageProps> = ({
   const totalUpcoming = draws.filter((s) => s.status === 'Upcoming' || s.status === 'Live').length;
 
   return (
-    <div className="min-h-screen bg-zinc-950 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-zinc-950 py-8 sm:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* Header Title */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-zinc-900 via-amber-950/30 to-zinc-900 p-6 rounded-3xl border border-amber-500/30 shadow-2xl">
@@ -188,11 +188,12 @@ export const ViewResultsPage: React.FC<ViewResultsPageProps> = ({
                     </p>
 
                     {isPublished && slot.winningNumber ? (
-                      <div className="flex items-center justify-center gap-2">
+                      <div className="flex items-center justify-center gap-2 sm:gap-2.5 my-1">
                         {slot.winningNumber.split('').map((digit, dIdx) => (
                           <span
                             key={dIdx}
-                            className="flex h-11 w-9 items-center justify-center rounded-lg bg-gradient-to-b from-amber-400 to-amber-600 text-zinc-950 font-mono font-black text-xl shadow-md shadow-amber-500/20"
+                            className="winning-number-ball flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center font-mono text-lg sm:text-xl"
+                            style={{ animationDelay: `${dIdx * 0.12}s` }}
                           >
                             {digit}
                           </span>

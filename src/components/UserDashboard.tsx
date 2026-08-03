@@ -212,8 +212,8 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({ onGoToLotteries })
   const totalWinnings = wonTickets.reduce((sum, t) => sum + t.prizeWon, 0);
 
   return (
-    <div className="min-h-screen bg-zinc-950 py-12 px-4 sm:px-6 lg:px-8 text-zinc-100">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-zinc-950 py-8 sm:py-12 text-zinc-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* User Profile Header Card */}
         <div className="rounded-3xl bg-gradient-to-r from-zinc-900 via-amber-950/40 to-zinc-900 p-6 sm:p-8 border border-amber-500/30 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">

@@ -132,8 +132,8 @@ export const Footer: React.FC = () => {
       </div>
 
       {/* Compliance Disclaimer Notice Banner */}
-      <div className="bg-zinc-900 border-t border-zinc-800 py-4 px-4 text-center text-[11px] text-zinc-500">
-        <div className="max-w-4xl mx-auto space-y-1">
+      <div className="bg-zinc-900 border-t border-zinc-800 py-4 text-center text-[11px] text-zinc-500">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-1">
           <p className="text-amber-400/90 font-bold flex items-center justify-center gap-1">
             <AlertTriangle className="h-3.5 w-3.5" /> 18+ Responsible Gaming Warning / দায়িত্বশীল গেমিং নোটিশ
           </p>

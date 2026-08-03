@@ -68,12 +68,13 @@ export const TodaysResultsSection: React.FC<TodaysResultsSectionProps> = ({
 
             <p className="text-xs text-zinc-400 uppercase font-mono tracking-wider">Winning Lucky Number</p>
 
-            <div className="my-4 flex items-center justify-center gap-2">
+            <div className="my-4 flex items-center justify-center gap-2.5 sm:gap-3">
               {latestPublished?.winningNumber ? (
                 latestPublished.winningNumber.split('').map((digit, idx) => (
                   <div
                     key={idx}
-                    className="flex h-12 w-10 sm:h-14 sm:w-12 items-center justify-center rounded-xl bg-gradient-to-b from-amber-400 to-amber-600 text-zinc-950 font-mono font-black text-2xl shadow-lg shadow-amber-500/30"
+                    className="winning-number-ball flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center font-mono text-2xl sm:text-3xl"
+                    style={{ animationDelay: `${idx * 0.15}s` }}
                   >
                     {digit}
                   </div>

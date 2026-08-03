@@ -60,8 +60,8 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
   };
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-zinc-950/95 backdrop-blur-xl border-t border-amber-500/30 px-2 py-2 shadow-[0_-5px_25px_rgba(0,0,0,0.8)]">
-      <div className="max-w-md mx-auto grid grid-cols-5 gap-1 items-center">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-zinc-950/95 backdrop-blur-xl border-t border-amber-500/30 py-2 shadow-[0_-5px_25px_rgba(0,0,0,0.8)]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-5 gap-1 items-center">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive =
