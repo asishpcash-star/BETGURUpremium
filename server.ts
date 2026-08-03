@@ -43,10 +43,11 @@ let users: User[] = [
   {
     id: 'usr-admin-1',
     name: 'Super Admin',
-    email: 'admin@luxelotto.com',
+    email: 'admin@betguru.com',
     role: 'super_admin',
     status: 'active',
     phone: '+1 800 589 3568',
+    password: 'admin123',
     walletBalance: 250000,
     profilePic: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
     createdAt: new Date().toISOString(),
@@ -56,10 +57,11 @@ let users: User[] = [
   {
     id: 'usr-101',
     name: 'Rahul Sharma',
-    email: 'user@luxelotto.com',
+    email: 'user@betguru.com',
     role: 'user',
     status: 'active',
     phone: '+91 98765 43210',
+    password: '123456',
     walletBalance: 5400,
     profilePic: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
     createdAt: new Date(Date.now() - 86400000 * 10).toISOString(),
@@ -73,6 +75,7 @@ let users: User[] = [
     role: 'user',
     status: 'active',
     phone: '+91 91234 56789',
+    password: '123456',
     walletBalance: 1250,
     profilePic: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
     createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
@@ -396,14 +399,37 @@ setInterval(checkAndAutoPublishDraws, 10000); // Check every 10 seconds
 // Auth API
 app.post('/api/auth/login', (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+
+  if (!email || !String(email).trim()) {
+    return res.status(400).json({ error: 'Please enter your email or mobile number.' });
+  }
+
+  const inputVal = String(email).trim().toLowerCase();
+  const inputDigits = inputVal.replace(/\D/g, '');
+
+  const user = users.find((u) => {
+    const userEmail = (u.email || '').toLowerCase();
+    const userPhoneDigits = (u.phone || '').replace(/\D/g, '');
+    const userName = (u.name || '').toLowerCase();
+
+    if (userEmail === inputVal) return true;
+    if (inputVal === 'user@luxelotto.com' && userEmail === 'user@betguru.com') return true;
+    if (inputVal === 'admin@luxelotto.com' && userEmail === 'admin@betguru.com') return true;
+    if (inputDigits.length >= 6 && userPhoneDigits.endsWith(inputDigits.slice(-10))) return true;
+    if (userName === inputVal) return true;
+    return false;
+  });
 
   if (!user) {
-    return res.status(401).json({ error: 'Invalid email or password.' });
+    return res.status(401).json({ error: 'Account not found. Please check your credentials or Register.' });
   }
 
   if (user.status === 'suspended') {
     return res.status(403).json({ error: 'Your account has been suspended by Admin.' });
+  }
+
+  if (user.password && password && user.password !== password) {
+    return res.status(401).json({ error: 'Incorrect password. Please try again.' });
   }
 
   res.json({ success: true, user });
@@ -412,17 +438,45 @@ app.post('/api/auth/login', (req: Request, res: Response) => {
 app.post('/api/auth/register', (req: Request, res: Response) => {
   const { name, email, phone, password } = req.body;
 
-  if (users.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
-    return res.status(400).json({ error: 'Email is already registered.' });
+  const cleanName = name ? String(name).trim() : '';
+  const cleanEmail = email ? String(email).trim().toLowerCase() : '';
+  const cleanPhone = phone ? String(phone).trim() : '';
+  const cleanPass = password ? String(password) : '';
+
+  if (!cleanName) {
+    return res.status(400).json({ error: 'Please enter your Full Name.' });
   }
+
+  if (!cleanEmail && !cleanPhone) {
+    return res.status(400).json({ error: 'Please enter an Email or Mobile Number.' });
+  }
+
+  if (!cleanPass) {
+    return res.status(400).json({ error: 'Please enter a Password.' });
+  }
+
+  if (cleanEmail && users.some((u) => u.email && u.email.toLowerCase() === cleanEmail)) {
+    return res.status(400).json({ error: 'An account with this email already exists. Please sign in.' });
+  }
+
+  const cleanPhoneDigits = cleanPhone.replace(/\D/g, '');
+  if (
+    cleanPhoneDigits.length >= 6 &&
+    users.some((u) => u.phone && u.phone.replace(/\D/g, '').endsWith(cleanPhoneDigits.slice(-10)))
+  ) {
+    return res.status(400).json({ error: 'An account with this mobile number already exists. Please sign in.' });
+  }
+
+  const finalEmail = cleanEmail || `${cleanPhoneDigits || Date.now()}@betguru.com`;
 
   const newUser: User = {
     id: `usr-${Date.now()}`,
-    name,
-    email,
+    name: cleanName,
+    email: finalEmail,
     role: 'user',
     status: 'active',
-    phone: phone || '',
+    phone: cleanPhone || '',
+    password: cleanPass,
     walletBalance: 100, // $100 Welcome bonus
     createdAt: new Date().toISOString(),
     twoFactorEnabled: false,
@@ -441,7 +495,17 @@ app.post('/api/auth/register', (req: Request, res: Response) => {
     amount: 100,
     status: 'completed',
     method: 'Wallet',
-    note: 'Sign-up Welcome Bonus',
+    note: 'Sign-up Welcome Bonus ($100)',
+    createdAt: new Date().toISOString(),
+  });
+
+  notifications.unshift({
+    id: `notif-welcome-${Date.now()}`,
+    userId: newUser.id,
+    title: '🎁 $100 Welcome Bonus Credited!',
+    message: `Welcome to BETGURU, ${newUser.name}! We have added $100 bonus to your wallet to start playing immediately.`,
+    type: 'winning',
+    isRead: false,
     createdAt: new Date().toISOString(),
   });
 

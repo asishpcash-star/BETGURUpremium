@@ -9,6 +9,7 @@ export interface User {
   status: UserStatus;
   phone: string;
   walletBalance: number;
+  password?: string;
   profilePic?: string;
   createdAt: string;
   twoFactorEnabled: boolean;
